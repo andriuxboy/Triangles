@@ -14,43 +14,28 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import static org.hamcrest.Matcher.*;
+import org.junit.Rule;
+import org.junit.rules.ExpectedException;
 
 /**
  *
  * @author Andres
  */
-@RunWith(Parameterized.class)
-public class TrianguloSideTest {
+public class TrianguloExceptionTest {
     private Triangulo triangles;
     private  Integer number1;
     private  String expected;
     private  Integer number2;
     private Integer number3;
-
-    public TrianguloSideTest(String e, Integer n1, Integer n2, Integer n3){
-        this.expected = e;
-        this.number1 = n1;
-        this.number2 = n2;
-        this.number3 = n3;
-
-    }
-
-    @Before
-    public void initialize(){
-        triangles = new Triangulo(number1,number2,number3);
-    }
-    
-    @Parameterized.Parameters
-     public static Collection data(){
-        return Arrays.asList(new Object[][]{
-        {"Equilateral",5,5,5},{"Scalene",8,10,5},{"Isosceles",5,5,3 },{"Scalene" ,30,20,15},{"Equilateral",10,10,10} });
-
-    }    
-    
+        
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();    
     @Test
     public void getTypeTest(){
-        String actual = triangles.getSideType();
-        assertThat(actual, is(equalTo(expected)));
+        triangles = new Triangulo(1,5,90);
+        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expectMessage("Arguments cannot create a Triangle");
+        triangles.getSideType();
     }
     }
     
